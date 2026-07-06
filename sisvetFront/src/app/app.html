@@ -1,0 +1,321 @@
+<!-- Authentication Layout -->
+<div *ngIf="authService.isAuthenticated() && !isLandingPage; else guestLayout" class="min-h-screen bg-background text-on-background">
+
+  
+  <!-- Backdrop for mobile -->
+  <div 
+    *ngIf="isSidebarOpen()" 
+    (click)="toggleSidebar()" 
+    class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden">
+  </div>
+
+  <!-- SideNavBar -->
+  <aside 
+    [class.translate-x-0]="isSidebarOpen()"
+    [class.-translate-x-full]="!isSidebarOpen()"
+    [class.lg:-translate-x-full]="isSidebarCollapsed()"
+    class="bg-surface w-[280px] h-screen fixed left-0 top-0 overflow-y-auto shadow-sm border-r border-outline-variant flex flex-col py-lg px-md z-50 transition-all duration-300 ease-in-out lg:translate-x-0">
+    
+    <!-- Logo Header -->
+    <div class="flex items-center gap-md px-md mb-xl">
+      <div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-on-primary font-bold shadow-sm">
+        <span class="material-symbols-outlined">pets</span>
+      </div>
+      <div>
+        <h1 class="font-headline-md text-headline-md font-bold text-primary">VetCare</h1>
+        <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Clinical Precision</p>
+      </div>
+    </div>
+
+    <!-- Recepcionista Profile Status Tag -->
+    <div *ngIf="authService.isRecepcionista()" class="flex flex-col gap-sm px-md mb-lg py-sm bg-primary/5 rounded-xl border border-primary/20 mx-xs">
+      <div class="flex items-center gap-sm">
+        <div class="w-9 h-9 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold text-label-md shadow-sm border border-outline-variant">
+          {{ (authService.currentUser()?.username || 'RC').substring(0, 2).toUpperCase() }}
+        </div>
+        <div class="text-left">
+          <p class="font-label-md text-xs font-bold text-on-surface">{{ authService.currentUser()?.username }}</p>
+          <span class="inline-flex items-center gap-1.5 text-[10px] text-emerald-500 font-bold uppercase tracking-wide">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            En Turno
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- CTA (Quick actions) -->
+    <div class="px-md mb-xl">
+      <button 
+        routerLink="/citas" 
+        (click)="isSidebarOpen.set(false)"
+        class="w-full flex items-center justify-center gap-sm bg-primary-container text-on-primary font-label-md text-label-md py-sm px-md rounded-lg shadow-[0_4px_4px_rgba(0,0,0,0.05)] hover:bg-surface-tint hover:shadow-[0_12px_12px_rgba(0,0,0,0.08)] transition-all duration-300 ease-in-out">
+        <span class="material-symbols-outlined">add</span>
+        Nueva Cita
+      </button>
+    </div>
+    
+    <!-- Navigation Links -->
+    <nav class="flex-1 flex flex-col gap-xs overflow-y-auto pr-xs">
+      
+      <!-- Administrator/Veterinarian Menu -->
+      <ng-container *ngIf="!authService.isRecepcionista()">
+        <a 
+          routerLink="/dashboard" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          [routerLinkActiveOptions]="{exact: true}"
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">dashboard</span>
+          Dashboard
+        </a>
+        
+        <a 
+          routerLink="/clientes" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">groups</span>
+          Clientes
+        </a>
+        
+        <a 
+          routerLink="/mascotas" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">pets</span>
+          Mascotas
+        </a>
+        
+        <a 
+          routerLink="/historial-clinico" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">history_edu</span>
+          Historial Clínico
+        </a>
+        
+        <a 
+          routerLink="/vacunas" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">vaccines</span>
+          Vacunas
+        </a>
+        
+        <a 
+          *ngIf="authService.isAdmin()"
+          routerLink="/usuarios" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">person</span>
+          Usuarios
+        </a>
+        
+        <a 
+          *ngIf="authService.isAdmin()"
+          routerLink="/auditoria" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">analytics</span>
+          Auditoría de Logs
+        </a>
+        
+        <a 
+          *ngIf="authService.isAdmin()"
+          routerLink="/veterinarios" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">medical_services</span>
+          Veterinarios
+        </a>
+        
+        <a 
+          routerLink="/citas" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">calendar_today</span>
+          Citas Médicas
+        </a>
+
+        <a 
+          *ngIf="authService.isAdmin()"
+          routerLink="/pagos" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">payments</span>
+          Pagos y Finanzas
+        </a>
+      </ng-container>
+
+      <!-- Recepcionista Menu -->
+      <ng-container *ngIf="authService.isRecepcionista()">
+        
+        <!-- Dashboard Link -->
+        <a 
+          routerLink="/dashboard" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          [routerLinkActiveOptions]="{exact: true}"
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">dashboard</span>
+          Dashboard
+        </a>
+
+        <!-- Clientes Link -->
+        <a 
+          routerLink="/clientes" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">groups</span>
+          Clientes
+        </a>
+
+        <!-- Mascotas Link -->
+        <a 
+          routerLink="/mascotas" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">pets</span>
+          Mascotas
+        </a>
+
+        <!-- Citas Link -->
+        <a 
+          routerLink="/citas" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">calendar_today</span>
+          Citas Médicas
+        </a>
+
+        <!-- Veterinarios Link -->
+        <a 
+          routerLink="/veterinarios" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">medical_services</span>
+          Veterinarios
+        </a>
+
+        <!-- Pagos Link -->
+        <a 
+          routerLink="/pagos" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">payments</span>
+          Pagos y Facturación
+        </a>
+
+        <!-- Reportes Link -->
+        <a 
+          routerLink="/reportes" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">analytics</span>
+          Reportes
+        </a>
+
+        <!-- Notificaciones Link -->
+        <a 
+          routerLink="/notificaciones" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">notifications</span>
+          Notificaciones
+        </a>
+
+        <!-- Mi Perfil Link -->
+        <a 
+          routerLink="/mi-perfil" 
+          routerLinkActive="bg-primary/10 text-primary font-semibold" 
+          (click)="isSidebarOpen.set(false)"
+          class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-lg font-body-sm text-body-sm">
+          <span class="material-symbols-outlined text-[20px]">account_circle</span>
+          Mi Perfil
+        </a>
+
+      </ng-container>
+
+    </nav>
+    
+    <!-- Footer Links -->
+    <div class="mt-auto flex flex-col gap-xs pt-md border-t border-outline-variant/50">
+      <button 
+        (click)="logout()" 
+        class="w-full flex items-center gap-md px-md py-sm text-error hover:bg-error-container/20 transition-colors duration-200 rounded-lg font-body-sm text-body-sm text-left">
+        <span class="material-symbols-outlined text-[20px]">logout</span>
+        Cerrar Sesión
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content Layout Area -->
+  <div 
+    [class.lg:ml-[280px]]="!isSidebarCollapsed()"
+    [class.lg:ml-0]="isSidebarCollapsed()"
+    class="ml-0 flex flex-col min-h-screen transition-all duration-300">
+    
+    <!-- TopNavBar -->
+    <header 
+      [class.lg:w-[calc(100%-280px)]]="!isSidebarCollapsed()"
+      [class.lg:w-full]="isSidebarCollapsed()"
+      class="bg-surface/80 backdrop-blur-md fixed top-0 right-0 w-full h-16 z-40 border-b border-outline-variant flex justify-between items-center px-lg transition-all duration-300">
+      
+      <!-- Burger Toggle on Left for Mobile & Collapse Toggle for Desktop -->
+      <div class="flex items-center gap-xs">
+        <button (click)="toggleSidebar()" class="lg:hidden w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <button (click)="toggleSidebarCollapse()" class="hidden lg:flex w-10 h-10 rounded-full items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors" title="Minimizar barra lateral">
+          <span class="material-symbols-outlined">{{ isSidebarCollapsed() ? 'menu' : 'menu_open' }}</span>
+        </button>
+      </div>
+
+      <!-- Spacer/Search placeholder -->
+      <div class="hidden sm:block flex-1 max-w-sm"></div>
+      
+      <!-- Trailing Profile Details -->
+      <div class="flex items-center gap-md" *ngIf="authService.currentUser() as user">
+        <button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200">
+          <span class="material-symbols-outlined">notifications</span>
+        </button>
+        <div class="h-8 w-px bg-outline-variant hidden sm:block"></div>
+        <div class="flex items-center gap-sm">
+          <div class="w-9 h-9 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold text-label-md border border-outline-variant">
+            {{ user.username.substring(0, 2).toUpperCase() }}
+          </div>
+          <div class="text-left hidden md:block">
+            <p class="font-label-md text-label-md text-on-surface font-semibold">{{ user.username }}</p>
+            <p class="font-label-sm text-label-sm text-on-surface-variant uppercase">{{ user.roles.join(', ') }}</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Canvas -->
+    <main class="flex-1 pt-24 px-lg md:px-container-margin pb-xl">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+</div>
+
+<!-- Guest Layout -->
+<ng-template #guestLayout>
+  <router-outlet></router-outlet>
+</ng-template>

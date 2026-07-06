@@ -1,0 +1,6 @@
+node_modules/
+.metadata/
+target/
+.gradle/
+.idea/
+*.log

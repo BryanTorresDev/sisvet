@@ -1,0 +1,11 @@
+.hide-desktop {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .hide-desktop {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
