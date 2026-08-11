@@ -43,14 +43,13 @@ Sistema web de gestión veterinaria desarrollado como proyecto integrador durant
 
 ### Desarrollo Frontend
 
-- Desarrollo de interfaces web utilizando Angular.
-- Implementación de páginas de inicio de sesión y registro.
-- Desarrollo de formularios y módulos CRUD.
-- Creación de dashboards y diferentes interfaces del sistema.
-- Integración del frontend con APIs REST.
-- Participación en el flujo de autenticación mediante JWT.
-- Aplicación de HTML5, CSS3 y Bootstrap para el desarrollo de las interfaces.
-- Utilización de Git y GitHub para el control de versiones y trabajo colaborativo.
+Desarrollo y modificación de interfaces web utilizando Angular.
+Implementación y adaptación de formularios y módulos CRUD.
+Desarrollo de interfaces para diferentes módulos del sistema.
+Integración del frontend con servicios REST.
+Participación en el flujo de autenticación mediante JWT.
+Aplicación de HTML5, CSS3 y Bootstrap.
+Uso de Git y GitHub para el control de versiones y trabajo colaborativo.
 
 ## 📸 Capturas de pantalla
 
